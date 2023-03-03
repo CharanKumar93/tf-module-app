@@ -49,7 +49,8 @@ resource "aws_iam_policy" "policy" {
           "arn:aws:ssm:us-east-1:633788536644:parameter/${var.env}.docdb*",
           "arn:aws:ssm:us-east-1:633788536644:parameter/${var.env}.elasticache*",
           "arn:aws:ssm:us-east-1:633788536644:parameter/${var.env}.rds*",
-          "arn:aws:ssm:us-east-1:633788536644:parameter/${var.env}.rabbitmq*"
+          "arn:aws:ssm:us-east-1:633788536644:parameter/${var.env}.rabbitmq*",
+          "arn:aws:ssm:us-east-1:633788536644:parameter/grafana*"
         ]
       },
       {
@@ -86,6 +87,14 @@ resource "aws_security_group" "main" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = var.bastion_cidr
+  }
+
+  ingress {
+    description = "PROMETHEUS"
+    from_port   = 9100
+    to_port     = 9100
+    protocol    = "tcp"
+    cidr_blocks = var.monitor_cidr
   }
 
   egress {
